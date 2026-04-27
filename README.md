@@ -5,7 +5,7 @@
 ## 📁 Project Structure
 
 ```
-Scheduling_Project/
+Round Robin vs SRTF Scheduling Project/
 │
 ├── main.py
 │
@@ -46,7 +46,7 @@ This section describes the responsibilities of each team member and the files as
 
 ---
 
-##  Member 1 — Input & Validation
+##  Karem mahmoud — Input & Validation
 
  **Responsible for user input and validation**
 
@@ -77,7 +77,7 @@ core/process.py
 
 ---
 
-##  Member 2 — Round Robin Algorithm
+##  Yossef Sayed — Round Robin Algorithm
 
 🎯 **Responsible for full Round Robin implementation**
 
@@ -103,7 +103,7 @@ gui/ready_queue_view.py
 
 ---
 
-##  Member 3 — SRTF Algorithm
+##  Hassan — SRTF Algorithm
 
   **Responsible for SRTF implementation**
 
@@ -126,7 +126,7 @@ algorithms/srtf.py
 
 ---
 
-##  Member 4 — Metrics Calculation
+##  Kareem Ashraf — Metrics Calculation
 
 🎯 **Responsible for performance calculations**
 
@@ -159,7 +159,7 @@ Display results in tables.
 
 ---
 
-##  Member 5 — Gantt Charts
+##  fadl — Gantt Charts
 
 **Responsible for visualization**
 
@@ -182,7 +182,7 @@ Draw:
 
 ---
 
-##  Member 6 — Comparison & Analysis
+##  seif — Comparison & Analysis
 
  **Responsible for algorithm comparison**
 
@@ -217,7 +217,7 @@ Answer analysis questions such as:
 
 ---
 
-##  Member 7 — Conclusion & Testing
+##  kasim — Conclusion & Testing
 
 🎯 **Responsible for final output and testing**
 
