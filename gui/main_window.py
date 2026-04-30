@@ -1,6 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox
 
+from gui.gantt_chart import GanttChart, convert_srtf
+from algorithms.round_robin import run_round_robin
+from algorithms.srtf import srtf_scheduling, Process
+
 
 class MainWindow:
 
@@ -8,9 +12,6 @@ class MainWindow:
 
         self.root = root
         self.root.title("RR vs SRTF Scheduler")
-
-        self.run_callback = None
-
 
         frame = tk.Frame(root)
         frame.pack(pady=10)
@@ -20,8 +21,6 @@ class MainWindow:
         self.quantum_entry = tk.Entry(frame)
         self.quantum_entry.grid(row=0, column=1)
 
-        
-
         run_btn = tk.Button(
             frame,
             text="Run Simulation",
@@ -29,22 +28,10 @@ class MainWindow:
         )
         run_btn.grid(row=1, column=0, columnspan=2, pady=10)
 
-
-
-
-
-    def set_run_callback(self, func):
-
-        self.run_callback = func
-
-
-
-
-
+    # VERY IMPORTANT: inside class code did not run earlier (fadl)
     def run_clicked(self):
 
         try:
-
             quantum = int(self.quantum_entry.get())
 
             processes = [
@@ -52,57 +39,24 @@ class MainWindow:
                 {"pid": "P2", "arrival": 1, "burst": 3}
             ]
 
-            if self.run_callback:
+            # Round Robin
+            rr_blocks = run_round_robin(processes, quantum)
 
-                self.run_callback(processes, quantum)
+            # SRTF
+            srtf_processes = [
+                Process(p["pid"], p["arrival"], p["burst"])
+                for p in processes
+            ]
+
+            srtf_raw = srtf_scheduling(srtf_processes)
+            srtf_blocks = convert_srtf(srtf_raw)
+
+            # Draw charts
+            rr_chart = GanttChart(self.root)
+            rr_chart.draw(rr_blocks)
+
+            srtf_chart = GanttChart(self.root)
+            srtf_chart.draw(srtf_blocks)
 
         except:
-
-            messagebox.showerror(
-                "Error",
-                "Invalid Quantum"
-            )
-
-
-
-
-
-    def show_error(self, msg):
-
-        messagebox.showerror("Error", msg)
-
-
-
-    def draw_rr_gantt(self, data):
-
-        print("RR Gantt:", data)
-
-
-
-    def draw_srtf_gantt(self, data):
-
-        print("SRTF Gantt:", data)
-
-
-
-    def display_rr_results(self, data):
-
-        print("RR Results:", data)
-
-
-
-    def display_srtf_results(self, data):
-
-        print("SRTF Results:", data)
-
-
-
-    def display_comparison(self, *args):
-
-        print("Comparison:", args)
-
-
-
-    def display_conclusion(self, text):
-
-        print("Conclusion:", text)
+            messagebox.showerror("Error", "Invalid Quantum")

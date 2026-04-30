@@ -2,7 +2,7 @@ import tkinter as tk
 
 from gui.main_window import MainWindow
 from algorithms.round_robin import run_round_robin
-from algorithms.srtf import run_srtf
+from algorithms.srtf import srtf_scheduling
 from core.metrics import calculate_metrics
 from analysis.comparison import (
     best_waiting_time,
@@ -22,7 +22,8 @@ def run_simulation(processes, quantum, gui):
 
     rr_gantt = run_round_robin(processes, quantum)
 
-    srtf_gantt = run_srtf(processes)
+#changed run_srtf to srtf_scheduling to match the function name in this main file
+    srtf_gantt = srtf_scheduling(processes)
 
     rr_results = calculate_metrics(processes, rr_gantt)
 
@@ -92,11 +93,6 @@ def main():
     root = tk.Tk()
 
     gui = MainWindow(root)
-
-    gui.set_run_callback(
-        lambda processes, quantum:
-        run_simulation(processes, quantum, gui)
-    )
 
     root.mainloop()
 
