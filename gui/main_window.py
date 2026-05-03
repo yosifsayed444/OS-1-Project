@@ -28,7 +28,6 @@ class MainWindow:
         )
         run_btn.grid(row=1, column=0, columnspan=2, pady=10)
 
-    # VERY IMPORTANT: inside class code did not run earlier (fadl)
     def run_clicked(self):
 
         try:
@@ -39,10 +38,13 @@ class MainWindow:
                 {"pid": "P2", "arrival": 1, "burst": 3}
             ]
 
-            # Round Robin
-            rr_blocks = run_round_robin(processes, quantum)
+            rr_processes = [
+                Process(p["pid"], p["arrival"], p["burst"])
+                for p in processes
+            ]
+            rr_raw = run_round_robin(rr_processes, quantum)
+            rr_blocks = convert_srtf(rr_raw)
 
-            # SRTF
             srtf_processes = [
                 Process(p["pid"], p["arrival"], p["burst"])
                 for p in processes
@@ -51,7 +53,6 @@ class MainWindow:
             srtf_raw = srtf_scheduling(srtf_processes)
             srtf_blocks = convert_srtf(srtf_raw)
 
-            # Draw charts
             rr_chart = GanttChart(self.root)
             rr_chart.draw(rr_blocks)
 

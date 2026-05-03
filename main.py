@@ -2,7 +2,7 @@ import tkinter as tk
 
 from gui.main_window import MainWindow
 from algorithms.round_robin import run_round_robin
-from algorithms.srtf import srtf_scheduling
+from algorithms.srtf import srtf_scheduling, Process
 from core.metrics import calculate_metrics
 from analysis.comparison import (
     best_waiting_time,
@@ -20,10 +20,11 @@ def run_simulation(processes, quantum, gui):
         gui.show_error("Quantum must be greater than 0")
         return
 
-    rr_gantt = run_round_robin(processes, quantum)
+    rr_procs = [Process(p['pid'], p['arrival'], p['burst']) for p in processes]
+    rr_gantt = run_round_robin(rr_procs, quantum)
 
-#changed run_srtf to srtf_scheduling to match the function name in this main file
-    srtf_gantt = srtf_scheduling(processes)
+    srtf_procs = [Process(p['pid'], p['arrival'], p['burst']) for p in processes]
+    srtf_gantt = srtf_scheduling(srtf_procs)
 
     rr_results = calculate_metrics(processes, rr_gantt)
 
