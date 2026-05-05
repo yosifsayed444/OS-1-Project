@@ -27,46 +27,18 @@ def run_simulation(processes, quantum, gui):
     srtf_gantt = srtf_scheduling(srtf_procs)
 
     rr_results = calculate_metrics(processes, rr_gantt)
-
     srtf_results = calculate_metrics(processes, srtf_gantt)
 
     gui.draw_rr_gantt(rr_gantt)
-
     gui.draw_srtf_gantt(srtf_gantt)
-
     gui.display_rr_results(rr_results)
-
     gui.display_srtf_results(srtf_results)
 
-
-    rr_avg_wt = rr_results["avg_wt"]
-    rr_avg_rt = rr_results["avg_rt"]
-
-    srtf_avg_wt = srtf_results["avg_wt"]
-    srtf_avg_rt = srtf_results["avg_rt"]
-
-
-    waiting_result = best_waiting_time(
-        rr_avg_wt,
-        srtf_avg_wt
-    )
-
-    response_result = best_response_time(
-        rr_avg_rt,
-        srtf_avg_rt
-    )
-
-    fairness_result = check_fairness(
-        rr_results["processes"]
-    )
-
-    short_job_result = short_job_analysis(
-        srtf_results["processes"]
-    )
-
-    quantum_result = quantum_effect_analysis(
-        quantum
-    )
+    waiting_result  = best_waiting_time(rr_results, srtf_results)
+    response_result = best_response_time(rr_results, srtf_results)
+    fairness_result = check_fairness(rr_results)
+    short_job_result = short_job_analysis(rr_results, srtf_results)
+    quantum_result  = quantum_effect_analysis(quantum, rr_results)
 
     conclusion_text = generate_conclusion(
         waiting_result,
@@ -84,17 +56,12 @@ def run_simulation(processes, quantum, gui):
         quantum_result
     )
 
-    gui.display_conclusion(
-        conclusion_text
-    )
+    gui.display_conclusion(conclusion_text)
 
 
 def main():
-
     root = tk.Tk()
-
     gui = MainWindow(root)
-
     root.mainloop()
 
 

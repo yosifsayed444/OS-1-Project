@@ -12,8 +12,7 @@ from analysis.conclusion import generate_conclusion
 class ComparisonPanel:
 
     def __init__(self, root):
-
-        # ── Comparison Summary ──────────────────────────────────────────
+      
         tk.Label(
             root,
             text="Comparison Summary",
@@ -32,7 +31,7 @@ class ComparisonPanel:
         )
         self.text.pack(padx=10, pady=(0, 8))
 
-        # ── Final Conclusion ────────────────────────────────────────────
+       
         tk.Label(
             root,
             text="Final Conclusion",
@@ -51,7 +50,7 @@ class ComparisonPanel:
         )
         self.conclusion.pack(padx=10, pady=(0, 10))
 
-    # ───────────────────────────────────────────────────────────────────
+
     def update(self, rr_results, srtf_results, quantum):
         """
         Called after a simulation run with the metrics dicts from
@@ -75,13 +74,12 @@ class ComparisonPanel:
         self._set_text(self.text, summary)
         self._set_text(self.conclusion, conclusion_text)
 
-    # ───────────────────────────────────────────────────────────────────
+  
     def clear(self):
         """Reset both text boxes."""
         self._set_text(self.text, "")
         self._set_text(self.conclusion, "")
 
-    # ───────────────────────────────────────────────────────────────────
     @staticmethod
     def _set_text(widget, content):
         widget.config(state="normal")
