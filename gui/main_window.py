@@ -73,7 +73,7 @@ class MainWindow:
         self.root = root
         self.root.title("RR vs SRTF Scheduler")
 
-        # ── Input area ──────────────────────────────────────────────────
+      
         input_frame = tk.LabelFrame(root, text="Processes", padx=10, pady=10)
         input_frame.pack(fill="x", padx=10, pady=5)
 
@@ -111,7 +111,7 @@ class MainWindow:
 
         self._pid_counter = 1
 
-        # ── Gantt charts ────────────────────────────────────────────────
+  
         tk.Label(root, text="Round Robin — Gantt Chart",
                  font=("Arial", 10, "bold")).pack(anchor="w", padx=10)
         self._rr_gantt = GanttChart(root)
@@ -124,10 +124,10 @@ class MainWindow:
         self._rr_table   = ResultsTable(root, title="Round Robin — Results")
         self._srtf_table = ResultsTable(root, title="SRTF — Results")
 
-        # ── Comparison panel ────────────────────────────────────────────
+     
         self._comparison_panel = ComparisonPanel(root)
 
-    # ───────────────────────────────────────────────────────────────────
+  
 
     def _add_process(self):
         pid = f"P{self._pid_counter}"
