@@ -8,7 +8,7 @@ from src.tests.scenarios import SCENARIOS
 class AlgorithmsApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("CPU Scheduling Comparison: RR vs SRTF")
+        self.root.title("Round Robin vs SRTF")
         self.root.geometry("1200x900")
         self.processes_data = []
         self.setup_ui()
@@ -22,6 +22,10 @@ class AlgorithmsApp:
         
         row1 = ttk.Frame(input_p)
         row1.pack(fill="x", padx=5, pady=2)
+        ttk.Label(row1, text="PID:").pack(side="left")
+        self.pid_entry = ttk.Entry(row1, width=5)
+        self.pid_entry.insert(0, "1")
+        self.pid_entry.pack(side="left", padx=5)
         ttk.Label(row1, text="Arrival Time:").pack(side="left")
         self.arrival_entry = ttk.Entry(row1, width=8)
         self.arrival_entry.pack(side="left", padx=5)
@@ -29,6 +33,7 @@ class AlgorithmsApp:
         self.burst_entry = ttk.Entry(row1, width=8)
         self.burst_entry.pack(side="left", padx=5)
         ttk.Button(row1, text="Add Process", command=self.add_process).pack(side="left", padx=5)
+        ttk.Button(row1, text="Reset", command=self.reset_inputs).pack(side="left", padx=5)
         
         ttk.Label(row1, text="Time Quantum:").pack(side="left", padx=(20, 0))
         self.quantum_entry = ttk.Entry(row1, width=8)
@@ -91,15 +96,44 @@ class AlgorithmsApp:
 
     def add_process(self):
         try:
-            a, b = int(self.arrival_entry.get()), int(self.burst_entry.get())
-            if a < 0 or b <= 0: raise ValueError
-            pid = len(self.processes_data) + 1
+            pid_val = self.pid_entry.get().strip()
+            arr_val = self.arrival_entry.get().strip()
+            burst_val = self.burst_entry.get().strip()
+
+            if not pid_val or not arr_val or not burst_val:
+                raise ValueError("All input fields (PID, Arrival, Burst) are required.")
+
+            pid = int(pid_val)
+            a = int(arr_val)
+            b = int(burst_val)
+
+            if pid <= 0:
+                raise ValueError("PID must be a positive integer.")
+            if a < 0:
+                raise ValueError("Arrival Time cannot be negative.")
+            if b <= 0:
+                raise ValueError("Burst Time must be a positive integer.")
+
+            if any(p.pid == pid for p in self.processes_data):
+                raise ValueError(f"Process ID {pid} already exists. Please use a unique ID.")
+
             self.processes_data.append(Process(pid, a, b))
             self.process_table.insert("", "end", values=(pid, a, b))
+            
+            self.pid_entry.delete(0, tk.END)
+            self.pid_entry.insert(0, str(max([p.pid for p in self.processes_data] + [0]) + 1))
             self.arrival_entry.delete(0, tk.END)
             self.burst_entry.delete(0, tk.END)
-        except: 
-            messagebox.showerror("Input Error", "Enter valid integers (Arrival >= 0, Burst > 0).")
+        except ValueError as e:
+            messagebox.showerror("Input Error", str(e))
+        except Exception as e:
+            messagebox.showerror("Error", f"Unexpected error: {e}")
+
+    def reset_inputs(self):
+        self.pid_entry.delete(0, tk.END)
+        self.pid_entry.insert(0, str(max([p.pid for p in self.processes_data] + [0]) + 1))
+        self.arrival_entry.delete(0, tk.END)
+        self.burst_entry.delete(0, tk.END)
 
     def clear_all(self):
         self.processes_data = []
@@ -116,9 +150,45 @@ class AlgorithmsApp:
     def load_scenario(self, t):
         self.clear_all()
         if t == 'E': 
+            
+            self.reset_inputs()
+            self.pid_entry.delete(0, tk.END)
+            self.pid_entry.insert(0, "1")
             self.arrival_entry.insert(0, "0")
-            self.burst_entry.insert(0, "-1")
+            self.burst_entry.insert(0, "-5")
+            messagebox.showinfo("Validation Test", "Testing invalid Burst Time (-5)...")
             self.add_process()
+
+            
+            self.reset_inputs()
+            self.pid_entry.delete(0, tk.END)
+            self.pid_entry.insert(0, "1")
+            self.arrival_entry.insert(0, "0")
+            self.burst_entry.insert(0, "5")
+            self.add_process()
+            messagebox.showinfo("Validation Test", "Testing Duplicate PID (Adding another P1)...")
+            self.pid_entry.delete(0, tk.END)
+            self.pid_entry.insert(0, "1")
+            self.arrival_entry.insert(0, "2")
+            self.burst_entry.insert(0, "3")
+            self.add_process()
+
+
+            self.reset_inputs()
+            self.pid_entry.delete(0, tk.END)
+            self.pid_entry.insert(0, "2")
+            self.arrival_entry.insert(0, "0")
+            
+            
+            messagebox.showinfo("Validation Test", "Testing Missing Burst Time...")
+            self.add_process()
+            
+           
+           
+            self.quantum_entry.delete(0, tk.END)
+            self.quantum_entry.insert(0, "abc")
+            messagebox.showinfo("Validation Test", "Testing Invalid Time Quantum ('abc')...")
+            self.run_simulation()
             return
         
         for a, b in SCENARIOS[t]:
@@ -136,10 +206,14 @@ class AlgorithmsApp:
             messagebox.showwarning("Empty", "Add processes first.")
             return
         try:
-            q = int(self.quantum_entry.get())
-            if q <= 0: raise ValueError
-        except: 
-            messagebox.showerror("Error", "Invalid Quantum.")
+            q_val = self.quantum_entry.get().strip()
+            if not q_val:
+                raise ValueError("Time Quantum is required.")
+            q = int(q_val)
+            if q <= 0:
+                raise ValueError("Time Quantum must be a positive integer.")
+        except ValueError as e:
+            messagebox.showerror("Error", str(e))
             return
             
         rr_p, rr_g, rr_h = simulate_rr(self.processes_data, q)
