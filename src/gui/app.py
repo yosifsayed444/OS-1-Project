@@ -146,6 +146,10 @@ class AlgorithmsApp:
             v.delete("1.0", tk.END)
             v.config(state="disabled")
         self.conclusion_text.delete("1.0", tk.END)
+        
+        # Clear all input fields
+        for entry in [self.pid_entry, self.arrival_entry, self.burst_entry, self.quantum_entry]:
+            entry.delete(0, tk.END)
 
     def load_scenario(self, t):
         self.clear_all()

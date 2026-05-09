@@ -34,6 +34,36 @@ project-root/
 
 ---
 
+## Test Scenarios
+
+The following scenarios are pre-loaded into the application for testing and comparison:
+
+### Scenario A: Basic Workload
+- **Description:** A standard set of processes arriving at different times with varied burst lengths.
+- **Processes (Arrival, Burst):** (0, 5), (1, 3), (2, 8), (3, 6)
+
+### Scenario B: Quantum Sensitivity
+- **Description:** Processes with identical burst times to evaluate how different time quanta affect Round Robin performance.
+- **Processes (Arrival, Burst):** (0, 10), (0, 10), (0, 10)
+
+### Scenario C: Short Job Heavy
+- **Description:** A long-running process followed by several very short jobs. This highlights how SRTF prevents the "convoy effect."
+- **Processes (Arrival, Burst):** (0, 20), (1, 2), (2, 2), (3, 2)
+
+### Scenario D: Interactive Fairness
+- **Description:** Multiple processes with identical requirements arriving in sequence to test scheduling fairness.
+- **Processes (Arrival, Burst):** (0, 10), (1, 10), (2, 10)
+
+### Scenario E: Validation & Error Handling
+- **Description:** A comprehensive suite to verify input sanitization and system robustness.
+- **Validations include:**
+  - Rejecting non-positive Burst Times.
+  - Preventing duplicate Process IDs.
+  - Catching missing input values.
+  - Flagging invalid (non-numeric or non-positive) Time Quantum values.
+
+---
+
 ## Submission Checklist
 
 | Done | Submission Item             | Notes                                                                        |
