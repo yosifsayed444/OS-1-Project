@@ -150,45 +150,23 @@ class AlgorithmsApp:
     def load_scenario(self, t):
         self.clear_all()
         if t == 'E': 
-            
-            self.reset_inputs()
-            self.pid_entry.delete(0, tk.END)
-            self.pid_entry.insert(0, "1")
-            self.arrival_entry.insert(0, "0")
-            self.burst_entry.insert(0, "-5")
-            messagebox.showinfo("Validation Test", "Testing invalid Burst Time (-5)...")
-            self.add_process()
-
-            
-            self.reset_inputs()
-            self.pid_entry.delete(0, tk.END)
-            self.pid_entry.insert(0, "1")
-            self.arrival_entry.insert(0, "0")
-            self.burst_entry.insert(0, "5")
-            self.add_process()
-            messagebox.showinfo("Validation Test", "Testing Duplicate PID (Adding another P1)...")
-            self.pid_entry.delete(0, tk.END)
-            self.pid_entry.insert(0, "1")
-            self.arrival_entry.insert(0, "2")
-            self.burst_entry.insert(0, "3")
-            self.add_process()
-
-
-            self.reset_inputs()
-            self.pid_entry.delete(0, tk.END)
-            self.pid_entry.insert(0, "2")
-            self.arrival_entry.insert(0, "0")
-            
-            
-            messagebox.showinfo("Validation Test", "Testing Missing Burst Time...")
-            self.add_process()
-            
-           
-           
-            self.quantum_entry.delete(0, tk.END)
-            self.quantum_entry.insert(0, "abc")
-            messagebox.showinfo("Validation Test", "Testing Invalid Time Quantum ('abc')...")
-            self.run_simulation()
+            for pid, arr, burst, q, desc in SCENARIOS['E']:
+                messagebox.showinfo("Validation Test", f"Testing: {desc}")
+                self.reset_inputs()
+                # Overwrite defaults with test case values
+                self.pid_entry.delete(0, tk.END)
+                self.pid_entry.insert(0, pid)
+                self.arrival_entry.delete(0, tk.END)
+                self.arrival_entry.insert(0, arr)
+                self.burst_entry.delete(0, tk.END)
+                self.burst_entry.insert(0, burst)
+                self.quantum_entry.delete(0, tk.END)
+                self.quantum_entry.insert(0, q)
+                
+                if desc == 'Invalid Quantum Value':
+                    self.run_simulation()
+                else:
+                    self.add_process()
             return
         
         for a, b in SCENARIOS[t]:

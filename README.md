@@ -15,7 +15,7 @@ A comprehensive tool to analyze and compare Round Robin (RR) and Shortest Remain
 project-root/
   src/
     model/       # Process class
-    Algorithms/   # Algorithms (Round Robin & SRTF)
+    Algorithms/  # Algorithms (Round Robin & SRTF)
     metrics/     # (Waiting Time, Turnaround Time, etc.)
     gui/         # GUI and visualization components
     tests/       # test cases scenarios
