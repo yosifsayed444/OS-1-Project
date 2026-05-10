@@ -99,9 +99,10 @@ class AlgorithmsApp:
             pid_val = self.pid_entry.get().strip()
             arr_val = self.arrival_entry.get().strip()
             burst_val = self.burst_entry.get().strip()
+            q_val = self.quantum_entry.get().strip()
 
-            if not pid_val or not arr_val or not burst_val:
-                raise ValueError("All input fields (PID, Arrival, Burst) are required.")
+            if not pid_val or not arr_val or not burst_val or not q_val:
+                raise ValueError("All input fields (PID, Arrival, Burst, Quantum) are required.")
 
             pid = int(pid_val)
             a = int(arr_val)
@@ -147,9 +148,15 @@ class AlgorithmsApp:
             v.config(state="disabled")
         self.conclusion_text.delete("1.0", tk.END)
         
-        # Clear all input fields
+        
+        self.rr_metrics_l.config(text="Avg WT: - | Avg TAT: - | Avg RT: -")
+        self.srtf_metrics_l.config(text="Avg WT: - | Avg TAT: - | Avg RT: -")
+       
+       
         for entry in [self.pid_entry, self.arrival_entry, self.burst_entry, self.quantum_entry]:
             entry.delete(0, tk.END)
+        
+        self.pid_entry.insert(0, "1")
 
     def load_scenario(self, t):
         self.clear_all()
@@ -157,7 +164,6 @@ class AlgorithmsApp:
             for pid, arr, burst, q, desc in SCENARIOS['E']:
                 messagebox.showinfo("Validation Test", f"Testing: {desc}")
                 self.reset_inputs()
-                # Overwrite defaults with test case values
                 self.pid_entry.delete(0, tk.END)
                 self.pid_entry.insert(0, pid)
                 self.arrival_entry.delete(0, tk.END)
